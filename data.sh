@@ -1,0 +1,1 @@
+scp -r -P 119 pi@98.247.143.47:/home/pi/go/src/github.com/Nv7-Github/Nv7haven/data/eod/timing ./data
