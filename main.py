@@ -5,14 +5,15 @@ import math
 import numpy as np
 
 COMMAND = "combine"
+DIRECTORY = "before"
 
-files = os.listdir("data")
+files = os.listdir(DIRECTORY)
 if COMMAND != "":
   files = [COMMAND]
 pltsidelen = math.ceil(math.sqrt(len(files)))
 _, ax = plt.subplots(nrows = pltsidelen, ncols = pltsidelen)
 for i, command in enumerate(files):
-  with open(f"data/{command}") as f:
+  with open(f"{DIRECTORY}/{command}") as f:
     data = list(map(lambda x: float(x)/1000, f.read().strip().split("\n")))
     if COMMAND == "":
       plot = ax[i//pltsidelen, i % pltsidelen]
