@@ -9,7 +9,7 @@ def analyze(command: str, times, plt):
   plt.hist(times.ravel(), bins=max(len(times)//100, 50))
   print(f"{command}: {np.mean(times)} (stddev: {np.std(times)})")
 
-COMMAND = "combine"
+COMMAND = "info"
 DIRECTORY = "before"
 
 files = os.listdir(DIRECTORY)
