@@ -32,20 +32,32 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
 
   # Making the frequency tables
   # <2SD, ... (FREQLEN-2), >2SD
-  lexp = int(cdf(l) * len(vals))
+  lexp = cdf(l) * len(vals)
   if lexp == 0:
     lexp = 1
+  if lexp > 1000:
+    lexp = round(lexp)
+  elif lexp < 100:
+    lexp = round(lexp, 2)
+  elif lexp < 1000:
+    lexp = round(lexp, 1)
   lobs = len(vals[vals < l])
   xvals = [l]
   print(f"\\textless{l} & {lobs} & {lexp} \\\\")
-  binsize = round((r - l)/(FREQLEN-1), 2)
+  binsize = round((r - l)/(FREQLEN-2), 2)
   f_obs = [lobs]
   f_exp = [lexp]
   for i in range(0, FREQLEN-2):
     lv = l + i*binsize
     rv = l + (i+1)*binsize
     obs = len(vals[np.logical_and(lv < vals, vals < rv)])
-    exp = int(round((cdf(rv) - cdf(lv))*(len(vals) + errval)))
+    exp = (cdf(rv) - cdf(lv))*(len(vals) + errval)
+    if exp > 1000:
+      exp = round(exp)
+    elif exp < 100:
+      exp = round(exp, 2)
+    elif exp < 1000:
+      exp = round(exp, 1)
     if exp == 0:
       exp = 1
     f_obs.append(obs)
@@ -53,11 +65,17 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
     xvals.append((lv + rv)/2)
     print(f"{round(lv, 2)}-{round(rv, 2)} & {obs} & {exp} \\\\")
   
-  r = l + binsize*(FREQLEN-2)
+  r = round(l + binsize*(FREQLEN-2), 3)
   xvals.append(r)
 
   robs = len(vals[vals > r])
-  rexp = int((1-cdf(r)) * len(vals))
+  rexp = (1-cdf(r)) * len(vals)
+  if rexp > 1000:
+    rexp = round(rexp)
+  elif rexp < 100:
+    rexp = round(rexp, 2)
+  elif rexp < 1000:
+    rexp = round(rexp, 1)
   if rexp == 0:
     rexp = 1
   f_exp.append(rexp)
