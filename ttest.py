@@ -7,7 +7,7 @@ import os
 
 BEFORE = "before/info"
 AFTER = "after/info"
-N = 25
+N = 30
 
 with open(BEFORE) as f:
   before = np.array(list(map(lambda x: float(x)/1000, f.read().strip().split("\n"))))

@@ -41,7 +41,7 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
   binsize = round((r - l)/(FREQLEN-1), 2)
   f_obs = [lobs]
   f_exp = [lexp]
-  for i in range(0, FREQLEN-1):
+  for i in range(0, FREQLEN-2):
     lv = l + i*binsize
     rv = l + (i+1)*binsize
     obs = len(vals[np.logical_and(lv < vals, vals < rv)])
@@ -53,7 +53,7 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
     xvals.append((lv + rv)/2)
     print(f"{round(lv, 2)}-{round(rv, 2)} & {obs} & {exp} \\\\")
   
-  r = l + binsize*(FREQLEN-1)
+  r = l + binsize*(FREQLEN-2)
   xvals.append(r)
 
   robs = len(vals[vals > r])
