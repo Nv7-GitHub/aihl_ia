@@ -33,6 +33,7 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
   # Making the frequency tables
   # <2SD, ... (FREQLEN-2), >2SD
   lexp = cdf(l) * len(vals)
+  f_exp = [lexp]
   if lexp == 0:
     lexp = 1
   if lexp > 1000:
@@ -46,12 +47,12 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
   print(f"\\textless{l} & {lobs} & {lexp} \\\\")
   binsize = round((r - l)/(FREQLEN-2), 2)
   f_obs = [lobs]
-  f_exp = [lexp]
   for i in range(0, FREQLEN-2):
     lv = l + i*binsize
     rv = l + (i+1)*binsize
     obs = len(vals[np.logical_and(lv < vals, vals < rv)])
     exp = (cdf(rv) - cdf(lv))*(len(vals) + errval)
+    f_exp.append(exp)
     if exp > 1000:
       exp = round(exp)
     elif exp < 100:
@@ -61,7 +62,6 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
     if exp == 0:
       exp = 1
     f_obs.append(obs)
-    f_exp.append(exp)
     xvals.append((lv + rv)/2)
     print(f"{round(lv, 2)}-{round(rv, 2)} & {obs} & {exp} \\\\")
   
@@ -70,6 +70,7 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
 
   robs = len(vals[vals > r])
   rexp = (1-cdf(r)) * len(vals)
+  f_exp.append(rexp)
   if rexp > 1000:
     rexp = round(rexp)
   elif rexp < 100:
@@ -78,7 +79,6 @@ def process(vals: list[float], l, r, errval, plt, mu1, sd1, mu2, sd2, mu3, sd3, 
     rexp = round(rexp, 1)
   if rexp == 0:
     rexp = 1
-  f_exp.append(rexp)
   err = np.sum(f_exp) - (np.sum(f_obs) + robs)
   f_obs.append(robs)
   print(f"\\textgreater{r} & {robs} & {rexp}\\\\")
